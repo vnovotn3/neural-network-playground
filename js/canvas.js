@@ -41,23 +41,26 @@ class Canvas {
     network.updateModel();
     this.clear1();
   }
+  //clear background canvas
   clear1() {
     const ctx = this.c1.getContext("2d");
     ctx.clearRect(0, 0, this.c1.width, this.c1.height);
   }
+  //clear front canvas
   clear2() {
     this.points = [];
     const ctx = this.c2.getContext("2d");
     ctx.clearRect(0, 0, this.c2.width, this.c2.height);
   }
+  //load points to canvas from array
   load(data) {
     this.clear2();
     for (const p of data) {
       this.addPoint(p.x, p.y, p.label);
     }
   }
+  //draw predictions of nn to background canvas
   drawOutput(data) {
-    //20 x 20 in row
     this.clear1();
     const ctx = this.c1.getContext("2d");
     let n = 0;
@@ -78,7 +81,7 @@ class Canvas {
 export const canvas = new Canvas();
 canvas.load(dataset1);
 
-//handle canvas click
+//handle canvas click, clear and dataset loading
 $("#canvas2").click((e) => {
   network.update();
   const rect = canvas.c2.getBoundingClientRect();
@@ -86,7 +89,6 @@ $("#canvas2").click((e) => {
   const y = ((e.clientY - rect.top) / rect.height) * canvas.c2.height;
   canvas.addPoint(x, y, selectedColor);
 });
-
 $("#clear").click(() => {
   network.update();
   canvas.clear1();

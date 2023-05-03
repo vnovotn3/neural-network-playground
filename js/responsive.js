@@ -1,5 +1,5 @@
 let isDesktop = true;
-
+//reconfigure UI based on breakpoints
 $(window).on("load resize", function () {
   const panel = document.querySelector(".left-panel");
   const top = document.querySelector(".left-panel .top");

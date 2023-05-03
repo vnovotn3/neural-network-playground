@@ -1,6 +1,11 @@
 import { canvas } from "./canvas.js";
 import { getColor } from "./utils.js";
 
+//network handles:
+//- network topology
+//- tensorflow model of the network
+//- network UI
+
 class Network {
   topology = []; //array of neurons for each layer
   model = null;
@@ -11,6 +16,7 @@ class Network {
   epochs = 0;
   predict = [];
   constructor() {
+    //start with 3 hidden layers
     this.addLayer();
     this.addLayer();
     this.addLayer();
@@ -45,7 +51,7 @@ class Network {
       this.update();
     }
   }
-
+  //creates tensorflow model based on topology
   updateModel() {
     this.model = tf.sequential();
     for (let i = 0; i < this.topology.length; i++) {
@@ -90,44 +96,6 @@ class Network {
     } else {
       $("#epochs").text((epochs / 1000).toFixed(3));
     }
-  }
-
-  async trainModel(epochs) {
-    //this.model.summary();
-    //this.model.layers.forEach((l) => l.getWeights()[0].print());
-
-    //get training data from canvas
-    let data = canvas.points.map((i) => [i.x - 500, i.y - 500]);
-    data = tf.tensor(data);
-    let labels = canvas.points.map((i) => (i.label == "green" ? 1 : 0));
-    labels = tf.tensor(labels);
-    //train
-    await this.model.fit(data, labels, {
-      epochs: epochs,
-      callbacks: {
-        onTrainBegin: async () => {
-          document.querySelector("audio").play();
-          $("#play").toggleClass("active");
-          $("#edges").toggleClass("active");
-        },
-        onEpochEnd: async (epoch, logs) => {
-          this.updateEpochs(this.epochs + 1);
-          if (this.epochs % 5 == 0) {
-            //predict output and render result
-            let output = this.model.predict(tf.tensor(this.predict)).dataSync();
-            canvas.drawOutput(output);
-            this.updateLayersUI();
-            this.updateEdgesUI();
-            //console.log(`Epoch ${epoch}: error: ${logs.loss}`);
-          }
-        },
-        onTrainEnd: async () => {
-          document.querySelector("audio").pause();
-          $("#play").toggleClass("active");
-          $("#edges").toggleClass("active");
-        },
-      },
-    });
   }
 
   // --------- LAYERS UI
@@ -220,6 +188,7 @@ class Network {
 
     $(edges).empty();
 
+    //render SVG edges based on topology
     for (let i = 0; i < l - 1; i++) {
       for (let j = 0; j < top[i]; j++) {
         for (let k = 0; k < top[i + 1]; k++) {
@@ -260,6 +229,48 @@ class Network {
     this.updateModel();
     this.updateLayersUI();
     this.updateEdgesUI();
+  }
+
+  // ---------- MODEL TRAINING
+
+  async trainModel(epochs) {
+    //this.model.summary();
+    //this.model.layers.forEach((l) => l.getWeights()[0].print());
+
+    //get training data from canvas
+    let data = canvas.points.map((i) => [i.x - 500, i.y - 500]);
+    data = tf.tensor(data);
+    let labels = canvas.points.map((i) => (i.label == "green" ? 1 : 0));
+    labels = tf.tensor(labels);
+    //train
+    await this.model.fit(data, labels, {
+      epochs: epochs,
+      callbacks: {
+        onTrainBegin: async () => {
+          //start animations and audio
+          document.querySelector("audio").play();
+          $("#play").toggleClass("active");
+          $("#edges").toggleClass("active");
+        },
+        onEpochEnd: async (epoch, logs) => {
+          this.updateEpochs(this.epochs + 1);
+          if (this.epochs % 5 == 0) {
+            //predict output and render result
+            let output = this.model.predict(tf.tensor(this.predict)).dataSync();
+            canvas.drawOutput(output);
+            this.updateLayersUI();
+            this.updateEdgesUI();
+            //console.log(`Epoch ${epoch}: error: ${logs.loss}`);
+          }
+        },
+        onTrainEnd: async () => {
+          //end animations and audio
+          document.querySelector("audio").pause();
+          $("#play").toggleClass("active");
+          $("#edges").toggleClass("active");
+        },
+      },
+    });
   }
 }
 

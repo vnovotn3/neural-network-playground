@@ -1,14 +1,15 @@
 import { canvas } from "./canvas.js";
 import { network } from "./network.js";
 
+//show modal
 $("#upload").click(() => {
   $(".modal").toggleClass("is-active");
 });
-
+//hide modal
 $(".modal-background").click(() => {
   $(".modal").toggleClass("is-active");
 });
-
+//show uploaded file name
 const fileInput = document.querySelector("#file");
 fileInput.onchange = () => {
   if (fileInput.files.length > 0) {
@@ -17,9 +18,9 @@ fileInput.onchange = () => {
   }
 };
 
+//when filereader finishes -> parse content of the file
 let fr = new FileReader();
 fr.addEventListener("load", () => {
-  //process content of the file
   let data = [];
   let lines = fr.result.split("\n");
   for (let line of lines) {
@@ -45,11 +46,13 @@ fr.addEventListener("load", () => {
       }
     }
   }
+  //upload dataset to canvas
   network.update();
   canvas.load(data);
   $(".modal").toggleClass("is-active");
 });
 
+//on submit -> file reader process file
 $("#submit").click(() => {
   if (fileInput.files.length > 0) {
     let file = fileInput.files[0];

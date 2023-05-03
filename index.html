@@ -57,12 +57,18 @@
               class="navbar-item"
               >TensorFlow
             </a>
-            <a class="navbar-item">GitHub repo </a>
+            <a
+              href="https://github.com/vnovotn3/neural-network-playground"
+              target="_blank"
+              class="navbar-item"
+              >GitHub repo
+            </a>
           </div>
         </div>
       </div>
     </nav>
 
+    <!-- header with controls -->
     <header class="controls container">
       <div>
         <button id="restart"><img src="img/restart.svg" alt="restart"></button>
@@ -115,12 +121,13 @@
       </div>
     </header>
 
+    <!-- main -->
     <main class="container">
       <div class="columns is-multiline">
+        <!-- left panel -->
         <div
           class="column is-full-mobile is-full-tablet is-full-desktop is-narrow-widescreen"
         >
-          <!-- left panel -->
           <section class="left-panel box-section">
             <div class="mobile">
               <div class="left pr-4"></div>
@@ -161,9 +168,8 @@
             </div>
           </section>
         </div>
-
+        <!-- right panel -->
         <div class="column">
-          <!-- right panel -->
           <section class="main-panel box-section">
             <div class="space-between pb-5">
               <h2>Neural Network</h2>
@@ -198,10 +204,12 @@
       </div>
     </main>
 
+    <!-- audio -->
     <audio loop>
       <source src="music/music.mp3" type="audio/mpeg" >
     </audio>
 
+    <!-- file upload modal -->
     <div class="modal">
       <div class="modal-background"></div>
       <div class="modal-content">

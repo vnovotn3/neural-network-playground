@@ -1,3 +1,4 @@
+//get color between yellow and green based on weight
 export function getColor(weight, opacity) {
   const color1 = [43, 209, 128];
   const color2 = [250, 193, 50];
