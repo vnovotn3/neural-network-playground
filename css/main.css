@@ -61,7 +61,7 @@ body {
   min-width: 800px;
 }
 
-h1 {
+h1, h2 {
   font-size: 1.3rem;
   color: white !important;
   font-weight: 600;
