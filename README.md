@@ -17,3 +17,5 @@ App logic is divided into following core JS modules:
 * **network.js** manges network topology and tensorflow model and renders UI representaion of the network
 * **fileUpload.js** handles processing of input loaded from a .txt file
 * **data.js** containes 3 input presets
+
+The app is running here: https://vnovotn3.github.io/neural-network-playground/
